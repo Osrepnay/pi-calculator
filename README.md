@@ -9,7 +9,7 @@ javac PiCalc.java
 java PiCalc  
 ```
 # Todo:
-Bellard's to check accuracy
+Bellard's to check accuracy  
 Zeta?  
 Leibniz  
 Ramanujan  
