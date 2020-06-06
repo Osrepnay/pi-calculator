@@ -1,3 +1,4 @@
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -6,11 +7,17 @@ import java.util.Scanner;
 public class PiCalc{
 	public static void main (String[] args){
 		Scanner s=new Scanner(System.in);
+		String[] piMethodsPrint=new String[]{"Chudnovsky", "Nilakantha", "Zeta(2)", "Leibniz"};
+		String[] piMethods=new String[]{"chudnovsky", "nilakantha", "zeta2", "leibniz"};
 		while(true){
-			System.out.println("Method to calculate pi:\n1. Chudnovsky\n2. Nilakantha\n3. Zeta(2)\n4. Exit");
+			System.out.println("Method to calculate pi:");
+			for(int i=0; i<piMethodsPrint.length; i++){
+				System.out.println((i+1)+". "+piMethodsPrint[i]);
+			}
+			System.out.println((piMethods.length+1)+". Exit");
 			int method=s.nextInt();
 			s.nextLine();
-			if(method==4){
+			if(method==piMethods.length+1){
 				break;
 			}
 			System.out.println("Number of digits(not guaranteed to be correct):");
@@ -18,20 +25,10 @@ public class PiCalc{
 			s.nextLine();
 			System.out.println("Input the seconds to run to start:");
 			int seconds=s.nextInt();
-			switch(method){
-				case 1:
-					chudnovsky(seconds, digits);
-					break;
-				case 2:
-					nilakantha(seconds, digits);
-					break;
-				case 3:
-					zeta2(seconds, digits);
-					break;
-				default:
-					System.out.println("Invalid method");
-					break;
-			}
+			try{
+			Method piMethod=new PiCalc().getClass().getDeclaredMethod(piMethods[method-1], int.class, int.class);
+			piMethod.invoke(new PiCalc(), seconds, digits);
+			}catch(Exception e){e.printStackTrace();}
 		}
 	}
 	
@@ -93,6 +90,27 @@ public class PiCalc{
 			pi=pi.add(BigDecimal.ONE.divide((new BigDecimal(String.valueOf(loopCount)).pow(2)), accuracy));
 			System.out.println(pi.multiply(new BigDecimal("6")).sqrt(accuracy));
 			loopCount++;
+			if(System.currentTimeMillis()-startTime>=seconds*1000){
+				break;
+			}
+		}
+	}
+
+	public static void leibniz(int seconds, int digits){
+		MathContext accuracy=new MathContext(digits);
+		BigDecimal pi=new BigDecimal("1", accuracy);
+		BigDecimal bottomValue=new BigDecimal("3", accuracy);
+		boolean add=false;
+		long startTime=System.currentTimeMillis();
+		while(true){
+			if(add){
+				pi=pi.add(BigDecimal.ONE.divide(bottomValue, accuracy));
+			}else{
+				pi=pi.subtract(BigDecimal.ONE.divide(bottomValue, accuracy));
+			}
+			System.out.println(pi.multiply(new BigDecimal("4")));
+			add=!add;
+			bottomValue=bottomValue.add(new BigDecimal("2"));
 			if(System.currentTimeMillis()-startTime>=seconds*1000){
 				break;
 			}
