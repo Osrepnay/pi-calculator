@@ -2,7 +2,7 @@
 A calculator to calculate pi  
 ## Current methods:  
 Chudnovsky  
-Nilakantha 
+Nilakantha  
 Leibniz  
 Zeta(2)  
 ## To run:  
