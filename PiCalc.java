@@ -7,10 +7,10 @@ public class PiCalc{
 	public static void main (String[] args){
 		Scanner s=new Scanner(System.in);
 		while(true){
-			System.out.println("Method to calculate pi:\n1. Nilakantha\n2. Chudnovsky\n3. Exit");
+			System.out.println("Method to calculate pi:\n1. Chudnovsky\n2. Nilakantha\n3. Zeta(2)\n4. Exit");
 			int method=s.nextInt();
 			s.nextLine();
-			if(method==3){
+			if(method==4){
 				break;
 			}
 			System.out.println("Number of digits(not guaranteed to be correct):");
@@ -20,10 +20,13 @@ public class PiCalc{
 			int seconds=s.nextInt();
 			switch(method){
 				case 1:
-					nilakantha(seconds, digits);
+					chudnovsky(seconds, digits);
 					break;
 				case 2:
-					chudnovsky(seconds, digits);
+					nilakantha(seconds, digits);
+					break;
+				case 3:
+					zeta2(seconds, digits);
 					break;
 				default:
 					System.out.println("Invalid method");
@@ -31,6 +34,32 @@ public class PiCalc{
 			}
 		}
 	}
+	
+	public static void chudnovsky(int seconds, int digits){
+		MathContext accuracy=new MathContext(digits);
+		BigDecimal piLoop=new BigDecimal("0").setScale(digits);
+		long k=0;
+		long startTime=System.currentTimeMillis();
+		while(true){
+			BigDecimal firstTop=factorial(new BigDecimal("6", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy));
+			BigDecimal secondTop=new BigDecimal("545140134", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy).add(new BigDecimal("13591409"));
+			BigDecimal firstBottom=factorial(new BigDecimal("3", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy));
+			BigDecimal secondBottom=factorial(new BigDecimal(String.valueOf(k))).pow(3);
+			BigDecimal thirdBottom=new BigDecimal("-262537412640768000", accuracy).pow((int)k);
+			BigDecimal topValue=firstTop.multiply(secondTop, accuracy);
+			BigDecimal bottomValue=firstBottom.multiply(secondBottom, accuracy).multiply(thirdBottom, accuracy);
+			BigDecimal loopPi=topValue.divide(bottomValue, digits, RoundingMode.HALF_UP);
+			piLoop=piLoop.add(loopPi);
+			if(k!=0){
+				System.out.println(new BigDecimal("426880").multiply(new BigDecimal("10005").sqrt(accuracy)).divide(piLoop, accuracy));
+			}
+			k++;
+			if(System.currentTimeMillis()-startTime>=seconds*1000){
+				break;
+			}
+		}
+	}
+	
 	public static void nilakantha(int seconds, int digits){
 		MathContext accuracy=new MathContext(digits);
 		BigDecimal pi=new BigDecimal("3", accuracy);
@@ -54,36 +83,20 @@ public class PiCalc{
 			}
 		}
 	}
-	public static void chudnovsky(int seconds, int digits){
-		long k=0;
-		BigDecimal piLoop=new BigDecimal("0").setScale(digits);
-		long startTime=System.currentTimeMillis();
+
+	public static void zeta2(int seconds, int digits){
 		MathContext accuracy=new MathContext(digits);
+		BigDecimal pi=new BigDecimal("0", accuracy);
+		long loopCount=1;
+		long startTime=System.currentTimeMillis();
 		while(true){
-			BigDecimal firstTop=factorial(new BigDecimal("6", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy));
-			BigDecimal secondTop=new BigDecimal("545140134", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy).add(new BigDecimal("13591409"));
-			BigDecimal firstBottom=factorial(new BigDecimal("3", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy));
-			BigDecimal secondBottom=factorial(new BigDecimal(String.valueOf(k))).pow(3);
-			BigDecimal thirdBottom=new BigDecimal("-262537412640768000", accuracy).pow((int)k);
-			BigDecimal topValue=firstTop.multiply(secondTop, accuracy);
-			BigDecimal bottomValue=firstBottom.multiply(secondBottom, accuracy).multiply(thirdBottom, accuracy);
-			BigDecimal loopPi=topValue.divide(bottomValue, digits, RoundingMode.HALF_UP);
-			piLoop=piLoop.add(loopPi);
-			if(k!=0){
-				System.out.println(new BigDecimal("426880").multiply(new BigDecimal("10005").sqrt(accuracy)).divide(piLoop, accuracy));
-			}
-			k++;
+			pi=pi.add(BigDecimal.ONE.divide((new BigDecimal(String.valueOf(loopCount)).pow(2)), accuracy));
+			System.out.println(pi.multiply(new BigDecimal("6")).sqrt(accuracy));
+			loopCount++;
 			if(System.currentTimeMillis()-startTime>=seconds*1000){
 				break;
 			}
 		}
-	}
-
-	public static BigDecimal pow(BigDecimal num, BigDecimal pow){
-		for(BigDecimal i=BigDecimal.ONE; i.compareTo(pow)==-1; i.add(BigDecimal.ONE)){
-			num=num.multiply(num);
-		}
-		return num;
 	}
 
 	public static BigDecimal factorial(BigDecimal num){
