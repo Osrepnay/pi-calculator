@@ -1,16 +1,16 @@
 # Pi Calculator  
 A calculator to calculate pi  
-# Current methods:  
+## Current methods:  
 Nilakantha  
 Chubnovsky  
-# To run:  
+## To run:  
 ```
 javac PiCalc.java  
 java PiCalc  
 ```
-# Todo:
+## Todo:
 Bellard's to check accuracy  
-Zeta?  
+Zeta  
 Leibniz  
 Ramanujan  
 Wallis  
