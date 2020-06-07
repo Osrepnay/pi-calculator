@@ -38,14 +38,14 @@ public class PiCalc{
 		long k=0;
 		long startTime=System.currentTimeMillis();
 		while(true){
-			BigDecimal firstTop=factorial(new BigDecimal("6", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy));
+			BigDecimal firstTop=factorial(new BigDecimal("6", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy), accuracy);
 			BigDecimal secondTop=new BigDecimal("545140134", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy).add(new BigDecimal("13591409"));
-			BigDecimal firstBottom=factorial(new BigDecimal("3", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy));
-			BigDecimal secondBottom=factorial(new BigDecimal(String.valueOf(k))).pow(3);
+			BigDecimal firstBottom=factorial(new BigDecimal("3", accuracy).multiply(new BigDecimal(String.valueOf(k)), accuracy), accuracy);
+			BigDecimal secondBottom=factorial(new BigDecimal(String.valueOf(k)), accuracy).pow(3);
 			BigDecimal thirdBottom=new BigDecimal("-262537412640768000", accuracy).pow((int)k);
 			BigDecimal topValue=firstTop.multiply(secondTop, accuracy);
 			BigDecimal bottomValue=firstBottom.multiply(secondBottom, accuracy).multiply(thirdBottom, accuracy);
-			BigDecimal loopPi=topValue.divide(bottomValue, digits, RoundingMode.HALF_UP);
+			BigDecimal loopPi=topValue.divide(bottomValue, accuracy);
 			piLoop=piLoop.add(loopPi);
 			if(k!=0){
 				System.out.println(new BigDecimal("426880").multiply(new BigDecimal("10005").sqrt(accuracy)).divide(piLoop, accuracy));
@@ -158,13 +158,13 @@ public class PiCalc{
 		}
 	}
 
-	public static BigDecimal factorial(BigDecimal num){
+	public static BigDecimal factorial(BigDecimal num, MathContext accuracy){
 		if(num.compareTo(BigDecimal.ZERO)==0){
 			return BigDecimal.ONE;
 		}
 		BigDecimal factorial=num.add(BigDecimal.ZERO);
 		for(BigDecimal i=num.subtract(BigDecimal.ONE); i.compareTo(BigDecimal.ZERO)==1; i=i.subtract(BigDecimal.ONE)){
-			factorial=factorial.multiply(i, new MathContext(300));
+			factorial=factorial.multiply(i, accuracy);
 		}
 		return factorial;
 	}
