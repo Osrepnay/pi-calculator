@@ -2,6 +2,7 @@
 A calculator to calculate pi  
 ## Current methods:  
 Chudnovsky  
+Viete  
 Nilakantha  
 Leibniz  
 Wallis  
@@ -14,5 +15,5 @@ java PiCalc
 ## Todo:
 Bellard's to check accuracy  
 Ramanujan  
-Viete  
+Newton  
 

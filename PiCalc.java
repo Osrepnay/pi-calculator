@@ -7,8 +7,8 @@ import java.util.Scanner;
 public class PiCalc{
 	public static void main (String[] args){
 		Scanner s=new Scanner(System.in);
-		String[] piMethodsPrint=new String[]{"Chudnovsky", "Nilakantha", "Leibniz", "Wallis", "Zeta(2)"};
-		String[] piMethods=new String[]{"chudnovsky", "nilakantha", "leibniz", "wallis", "zeta2"};
+		String[] piMethodsPrint=new String[]{"Chudnovsky", "Viete", "Nilakantha", "Leibniz", "Wallis", "Zeta(2)"};
+		String[] piMethods=new String[]{"chudnovsky", "viete", "nilakantha", "leibniz", "wallis", "zeta2"};
 		while(true){
 			System.out.println("Method to calculate pi:");
 			for(int i=0; i<piMethodsPrint.length; i++){
@@ -51,6 +51,25 @@ public class PiCalc{
 				System.out.println(new BigDecimal("426880").multiply(new BigDecimal("10005").sqrt(accuracy)).divide(piLoop, accuracy));
 			}
 			k++;
+			if(System.currentTimeMillis()-startTime>=seconds*1000){
+				break;
+			}
+		}
+	}
+
+	public static void viete(int seconds, int digits){
+		MathContext accuracy=new MathContext(digits);
+		BigDecimal pi=new BigDecimal("2").divide(new BigDecimal("2", accuracy).sqrt(accuracy).divide(new BigDecimal("2"), accuracy), accuracy);
+		long loopCount=1;
+		long startTime=System.currentTimeMillis();
+		while(true){
+			BigDecimal piMultiply=new BigDecimal("2", accuracy).sqrt(accuracy);
+			for(int i=0; i<loopCount; i++){
+				piMultiply=new BigDecimal("2").add(piMultiply).sqrt(accuracy);
+			}
+			pi=pi.multiply(new BigDecimal("2").divide(piMultiply, accuracy), accuracy);
+			System.out.println(pi);
+			loopCount++;
 			if(System.currentTimeMillis()-startTime>=seconds*1000){
 				break;
 			}
