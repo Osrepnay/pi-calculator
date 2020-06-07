@@ -15,5 +15,4 @@ java PiCalc
 ## Todo:
 Bellard's to check accuracy  
 Ramanujan  
-Newton  
 
