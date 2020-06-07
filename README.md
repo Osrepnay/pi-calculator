@@ -4,6 +4,7 @@ A calculator to calculate pi
 Chudnovsky  
 Nilakantha  
 Leibniz  
+Wallis  
 Zeta(2)  
 ## To run:  
 ```
@@ -13,6 +14,5 @@ java PiCalc
 ## Todo:
 Bellard's to check accuracy  
 Ramanujan  
-Wallis  
 Viete  
 

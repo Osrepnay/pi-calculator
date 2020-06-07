@@ -7,8 +7,8 @@ import java.util.Scanner;
 public class PiCalc{
 	public static void main (String[] args){
 		Scanner s=new Scanner(System.in);
-		String[] piMethodsPrint=new String[]{"Chudnovsky", "Nilakantha", "Zeta(2)", "Leibniz"};
-		String[] piMethods=new String[]{"chudnovsky", "nilakantha", "zeta2", "leibniz"};
+		String[] piMethodsPrint=new String[]{"Chudnovsky", "Nilakantha", "Leibniz", "Wallis", "Zeta(2)"};
+		String[] piMethods=new String[]{"chudnovsky", "nilakantha", "leibniz", "wallis", "zeta2"};
 		while(true){
 			System.out.println("Method to calculate pi:");
 			for(int i=0; i<piMethodsPrint.length; i++){
@@ -81,21 +81,6 @@ public class PiCalc{
 		}
 	}
 
-	public static void zeta2(int seconds, int digits){
-		MathContext accuracy=new MathContext(digits);
-		BigDecimal pi=new BigDecimal("0", accuracy);
-		long loopCount=1;
-		long startTime=System.currentTimeMillis();
-		while(true){
-			pi=pi.add(BigDecimal.ONE.divide((new BigDecimal(String.valueOf(loopCount)).pow(2)), accuracy));
-			System.out.println(pi.multiply(new BigDecimal("6")).sqrt(accuracy));
-			loopCount++;
-			if(System.currentTimeMillis()-startTime>=seconds*1000){
-				break;
-			}
-		}
-	}
-
 	public static void leibniz(int seconds, int digits){
 		MathContext accuracy=new MathContext(digits);
 		BigDecimal pi=new BigDecimal("1", accuracy);
@@ -111,6 +96,43 @@ public class PiCalc{
 			System.out.println(pi.multiply(new BigDecimal("4")));
 			add=!add;
 			bottomValue=bottomValue.add(new BigDecimal("2"));
+			if(System.currentTimeMillis()-startTime>=seconds*1000){
+				break;
+			}
+		}
+	}
+
+	public static void wallis(int seconds, int digits){
+		MathContext accuracy=new MathContext(digits);
+		BigDecimal pi=new BigDecimal("2", accuracy);
+		BigDecimal topValue=new BigDecimal("2", accuracy);
+		BigDecimal bottomValue=new BigDecimal("3", accuracy);
+		long loopCount=0;
+		long startTime=System.currentTimeMillis();
+		while(true){
+			pi=pi.multiply(topValue.divide(bottomValue, accuracy), accuracy);
+			System.out.println(pi.multiply(new BigDecimal("2"), accuracy));
+			if((loopCount%2)==0){
+				topValue=topValue.add(new BigDecimal("2"));
+			}else{
+				bottomValue=bottomValue.add(new BigDecimal("2"));
+			}
+			loopCount++;
+			if(System.currentTimeMillis()-startTime>=seconds*1000){
+				break;
+			}
+		}
+	}
+
+	public static void zeta2(int seconds, int digits){
+		MathContext accuracy=new MathContext(digits);
+		BigDecimal pi=new BigDecimal("0", accuracy);
+		long loopCount=1;
+		long startTime=System.currentTimeMillis();
+		while(true){
+			pi=pi.add(BigDecimal.ONE.divide((new BigDecimal(String.valueOf(loopCount)).pow(2)), accuracy));
+			System.out.println(pi.multiply(new BigDecimal("6")).sqrt(accuracy));
+			loopCount++;
 			if(System.currentTimeMillis()-startTime>=seconds*1000){
 				break;
 			}
